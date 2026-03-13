@@ -5,16 +5,16 @@ using UnityEngine;
 public class PlayerControllerX : MonoBehaviour
 {
     public bool gameOver;
-
+    public bool isLowEnough;
     public float floatForce = 10;
-    private float gravityModifier = 1.5f;
+    private float gravityModifier = 2f;
     private Rigidbody playerRb;
-
     public ParticleSystem explosionParticle;
     public ParticleSystem fireworksParticle;
     private AudioSource playerAudio;
     public AudioClip moneySound;
     public AudioClip explodeSound;
+    public AudioClip bounceSound;
 
 
     // Start is called before the first frame update
@@ -31,10 +31,22 @@ public class PlayerControllerX : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // While space is pressed and player is low enough, float up
-        if (Input.GetKey(KeyCode.Space) && !gameOver)
+        if (Input.GetKey(KeyCode.Space) && isLowEnough && !gameOver)
         {
             playerRb.AddForce(Vector3.up * floatForce, ForceMode.Impulse);
+        }
+
+        if (transform.position.y < 14)
+        {
+            isLowEnough = true;
+        }
+        else
+        {
+            isLowEnough = false;
+        }
+        if (transform.position.y < 1 && !gameOver)
+        {
+            playerRb.AddForce(Vector3.up * 3f, ForceMode.Impulse);
         }
     }
 
@@ -58,7 +70,10 @@ public class PlayerControllerX : MonoBehaviour
             Destroy(other.gameObject);
 
         }
-
+        else if (other.gameObject.CompareTag("Ground"))
+        {
+            playerRb.AddForce(Vector3.up * 10, ForceMode.Impulse);
+            playerAudio.PlayOneShot(bounceSound);
+        }
     }
-
 }
