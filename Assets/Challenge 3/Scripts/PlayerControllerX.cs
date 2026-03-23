@@ -7,8 +7,9 @@ public class PlayerControllerX : MonoBehaviour
     public bool gameOver;
     public bool isLowEnough;
     public float floatForce = 10;
-    private float gravityModifier = 2f;
+    private float gravityModifier = 2.0f;
     private Rigidbody playerRb;
+
     public ParticleSystem explosionParticle;
     public ParticleSystem fireworksParticle;
     private AudioSource playerAudio;
@@ -72,7 +73,7 @@ public class PlayerControllerX : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Ground"))
         {
-            playerRb.AddForce(Vector3.up * 10, ForceMode.Impulse);
+            playerRb.AddForce(Vector3.up * 3, ForceMode.Impulse);
             playerAudio.PlayOneShot(bounceSound);
         }
     }
